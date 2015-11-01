@@ -2,6 +2,7 @@ require 'bundler/setup'
 require 'sinatra'
 require 'jq'
 require 'net/http'
+require 'yajl/json_gem'
 
 def fetch(uri_str, limit = 10)
   fail ArgumentError, 'too many HTTP redirects' if limit == 0
@@ -29,10 +30,10 @@ end
     content_type 'application/json; charset=utf-8'
     begin
       json = fetch(params[:json]).body
-      jq = JQ(json, parse_json: false)
+      jq = JQ(json)
       stream do |out|
         jq.search(params[:filter]) do |result|
-          out << result
+          out << JSON.pretty_generate(result)
           out << "\n"
         end
       end
