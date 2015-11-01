@@ -16,6 +16,7 @@ end
       jq = JQ(json)
       stream do |out|
         jq.search(params[:filter]) do |result|
+          p result
           out << JSON.pretty_generate(result)
           out << "\n"
         end
