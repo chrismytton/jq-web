@@ -1,0 +1,10 @@
+{
+  "name": "jq web",
+  "description": "Query remote JSON files using jq(1).",
+  "repository": "https://github.com/chrismytton/jq-web",
+  "buildpacks": [
+    {
+      "url": "https://github.com/ddollar/heroku-buildpack-multi"
+    }
+  ]
+}
