@@ -3,6 +3,7 @@ require 'sinatra'
 require 'jq'
 require 'json'
 require 'open-uri'
+require 'yajl/json_gem'
 
 get '/' do
   erb :index
