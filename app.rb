@@ -1,9 +1,7 @@
 require 'bundler/setup'
 require 'sinatra'
 require 'jq'
-require 'json'
 require 'open-uri'
-require 'yajl/json_gem'
 
 get '/' do
   erb :index
@@ -14,11 +12,10 @@ end
     content_type 'application/json; charset=utf-8'
     begin
       json = open(params[:json]).read
-      jq = JQ(json)
+      jq = JQ(json, parse_json: false)
       stream do |out|
         jq.search(params[:filter]) do |result|
-          p result
-          out << JSON.pretty_generate(result)
+          out << result
           out << "\n"
         end
       end
