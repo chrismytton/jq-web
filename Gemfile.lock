@@ -1,3 +1,11 @@
+GIT
+  remote: git://github.com/chrismytton/ruby-jq.git
+  revision: 98875203596b3ea48592e5b45b001a2ebf31c7df
+  branch: change-extconf-paths
+  specs:
+    ruby-jq (0.1.6)
+      multi_json
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -12,8 +20,6 @@ GEM
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
-    ruby-jq (0.1.6)
-      multi_json
     sinatra (1.4.6)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -27,7 +33,7 @@ PLATFORMS
 DEPENDENCIES
   pry
   puma
-  ruby-jq
+  ruby-jq!
   sinatra
 
 BUNDLED WITH
