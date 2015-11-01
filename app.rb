@@ -1,7 +1,24 @@
 require 'bundler/setup'
 require 'sinatra'
 require 'jq'
-require 'open-uri'
+require 'net/http'
+
+def fetch(uri_str, limit = 10)
+  fail ArgumentError, 'too many HTTP redirects' if limit == 0
+
+  response = Net::HTTP.get_response(URI(uri_str))
+
+  case response
+  when Net::HTTPSuccess
+    response
+  when Net::HTTPRedirection
+    location = response['location']
+    warn "redirected to #{location}"
+    fetch(location, limit - 1)
+  else
+    response.value
+  end
+end
 
 get '/' do
   erb :index
@@ -11,7 +28,7 @@ end
   send method, '/jq' do
     content_type 'application/json; charset=utf-8'
     begin
-      json = open(params[:json]).read
+      json = fetch(params[:json]).body
       jq = JQ(json, parse_json: false)
       stream do |out|
         jq.search(params[:filter]) do |result|
@@ -19,7 +36,7 @@ end
           out << "\n"
         end
       end
-    rescue OpenURI::HTTPError => e
+    rescue Net::HTTPServerException => e
       error = "Failed to fetch url #{params[:json]}: #{e}"
       logger.warn(error)
       halt 400, error
